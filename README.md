@@ -17,7 +17,7 @@
 
 - has_many :items, dependent: :destroy
 - has_many :purchases, dependent: :destroy
-- has_one :credit_card, dependent: :destroy
+
 
 ## items テーブル
 
@@ -25,18 +25,24 @@
 | ------------------ | ---------- | ------------------------------- |
 | name               | string     | null: false                     |
 | description        | text       | null: false                     |
-| category           | string     | null: false                     |
-| status             | string     | null: false                     |
-| postage            | string     | null: false                     |
-| district           | string     | null: false                     |
-| days               | string     | null: false                     |
+| category           | integer    | null: false                     |
+| condition          | integer    | null: false                     |
+| postage            | integer    | null: false                     |
+| prefecture         | integer    | null: false                     |
+| days               | integer    | null: false                     |
 | price              | integer    | null: false                     |
-| user_id            | references | null: false, foreign_key: true  |
+| user               | references | null: false, foreign_key: true  |
 
 ### Association
 
 - has_one :purchase
+- has_one :image
 - belongs_to :user
+- belongs_to_active_hash :category
+- belongs_to_active_hash :condition
+- belongs_to_active_hash :postage
+- belongs_to_active_hash :district
+- belongs_to_active_hash :days
 
 ## credit_cards テーブル
 
@@ -46,35 +52,34 @@
 | expiry_month       | integer    | null: false                     |
 | expiry_year        | integer    | null: false                     |
 | cvc                | integer    | null: false                     |
-| user_id            | references | null: false, foreign_key: true  |
+| purchase           | references | null: false, foreign_key: true  |
 
 ### Association
 
-- belongs_to :user
+- belongs_to :purchase
 
-## deliveries テーブル
+## destinations テーブル
 
 | Column             | Type       | Options                         |
 | ------------------ | ---------- | ------------------------------- |
-| postal_code        | integer    | null: false                     |
-| prefecture         | string     | null: false                     |
+| postal_code        | string     | null: false                     |
+| prefecture         | integer    | null: false                     |
 | city               | string     | null: false                     |
 | address            | string     | null: false                     |
 | building_name      | string     |                                 |
-| phone_number       | integer    | null: false                     |
-| user               | references | null: false, foreign_key: true  |
+| phone_number       | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
 
 ### Association
 
-- belongs_to :user
-- has_one :image, dependent: :destroy
+- belongs_to :purchase
 
 ## images テーブル
 
 | Column             | Type       | Options                         |
 | ------------------ | ---------- | ------------------------------- |
-| image              | integer    | null: false                     |
-| item_id            | references | null: false, foreign_key: true  |
+| image              | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
 
 ### Association
 
@@ -84,10 +89,68 @@
 
 | Column             | Type       | Options                         |
 | ------------------ | ---------- | ------------------------------- |
-| user_id            | references | null: false, foreign_key: true  |
-| item_id            | references | null: false, foreign_key: true  |
+| user               | references | null: false, foreign_key: true  |
+| item               | references | null: false, foreign_key: true  |
 
 ### Association
 
+- has_one :credit_card
+- has_one :destination
 - belongs_to :user
 - belongs_to :item
+
+## categories テーブル
+
+| Column             | Type       | Options                         |
+| ------------------ | ---------- | ------------------------------- |
+| name               | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
+
+### Association
+
+- has_many :items
+
+## conditions テーブル
+
+| Column             | Type       | Options                         |
+| ------------------ | ---------- | ------------------------------- |
+| condition          | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
+
+### Association
+
+- has_many :items
+
+## postages テーブル
+
+| Column             | Type       | Options                         |
+| ------------------ | ---------- | ------------------------------- |
+| postage            | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
+
+### Association
+
+- has_many :items
+
+## Prefectures テーブル
+
+| Column             | Type       | Options                         |
+| ------------------ | ---------- | ------------------------------- |
+| prefecture         | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
+
+### Association
+
+- has_many :items
+- has_many :destinations
+
+## days テーブル
+
+| Column             | Type       | Options                         |
+| ------------------ | ---------- | ------------------------------- |
+| day                | string     | null: false                     |
+| item               | references | null: false, foreign_key: true  |
+
+### Association
+
+- has_many :items
