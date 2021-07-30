@@ -9,10 +9,6 @@ class Item < ApplicationRecord
     validates :name
     validates :description
   end
-  VALID_PRICEL_REGEX = /\A[0-9]+\z/
-  validates  :price,  presence: true, format: {with: VALID_PRICEL_REGEX}, numericality: { only_integer: true,
-    greater_than: 299, less_than: 10000000
-    }
 
   extend ActiveHash::Associations::ActiveRecordExtensions
     belongs_to :category, :condition, :postage, :prefecture, :days_to_ship
@@ -23,6 +19,7 @@ class Item < ApplicationRecord
       validates :prefecture_id
       validates :days_to_ship_id
     end
-
-
+  
+  validates :price, presence: true, numericality: { only_integer: true, message: "is invalid. Input half-width characters"} 
+  validates :price, numericality: { greater_than: 299, less_than: 10000000, message: "is out of setting range"}
 end
