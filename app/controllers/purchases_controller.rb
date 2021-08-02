@@ -6,4 +6,7 @@ class PurchasesController < ApplicationController
   def create
   end
 
+  def purchase_params
+    params.require(:purchase).permit(:price).merge(token: params[:token])
+  end
 end
