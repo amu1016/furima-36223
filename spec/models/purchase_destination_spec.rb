@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe PurchaseDestination, type: :model do
   describe '商品購入' do
     before do
-      @purchase_destination = FactoryBot.build(:purchase_destination)
-      
+      item = FactoryBot.create(:item, image: fixture_file_upload('app/assets/images/test.png'))
+      user = FactoryBot.create(:user)
+      @purchase_destination = FactoryBot.build(:purchase_destination, item_id: item.id, user_id: user.id)
+      sleep 1
     end
 
     context '内容に問題ない場合' do
@@ -63,6 +65,11 @@ RSpec.describe PurchaseDestination, type: :model do
         @purchase_destination.valid?
         expect(@purchase_destination.errors.full_messages).to include("Phone number is too short")
       end
+      it 'phone_numberが12桁以上であると保存できないこと' do
+        @purchase_destination.phone_number = "090123412345"
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Phone number is too long")
+      end
       it 'phone_numberが英字であると保存できないこと' do
         @purchase_destination.phone_number = "abcdefghij"
         @purchase_destination.valid?
@@ -77,6 +84,16 @@ RSpec.describe PurchaseDestination, type: :model do
         @purchase_destination.token = ""
         @purchase_destination.valid?
         expect(@purchase_destination.errors.full_messages).to include("Token can't be blank")
+      end
+      it 'user_idが存在しなければ保存できないこと' do
+        @purchase_destination.user_id = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("User can't be blank")
+      end
+      it 'item_idが存在しなければ保存できないこと' do
+        @purchase_destination.item_id = ""
+        @purchase_destination.valid?
+        expect(@purchase_destination.errors.full_messages).to include("Item can't be blank")
       end
     end
   end

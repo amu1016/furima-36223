@@ -1,7 +1,5 @@
 FactoryBot.define do
   factory :purchase_destination do
-    user_id   {1}
-    item_id   {2}
     postal_code   {'123-4567'}
     prefecture_id   {Faker::Number.between(from: 1,to: 47)}
     city {'テスト市'}
@@ -9,5 +7,6 @@ FactoryBot.define do
     building_name   {'テストハイツ201号室'}
     phone_number   {'04012341234'}
     token   {"tok_abcdefghijk00000000000000000"}
+    association :item
   end
 end

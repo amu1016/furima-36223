@@ -28,9 +28,7 @@ class PurchasesController < ApplicationController
 
   def move_to_top
     item = Item.find(params[:item_id])
-    if item.purchase.present? || item.user_id == current_user.id
-      redirect_to root_path 
-    end
+    redirect_to root_path if item.purchase.present? || item.user_id == current_user.id
   end
 
   def set_item
