@@ -1,10 +1,9 @@
 class PurchasesController < ApplicationController
   before_action :authenticate_user!, only: :index
+  before_action :set_item, only: [:index, :create]
   before_action :move_to_top, only: :index
-  before_action :set_item, only: :create
 
   def index
-    @purchase = Purchase.new(user_id: current_user.id, item_id: params[:item_id])
     @purchase_destination = PurchaseDestination.new
   end
 
@@ -26,14 +25,12 @@ class PurchasesController < ApplicationController
     params.require(:purchase_destination).permit(:postal_code, :prefecture_id , :city, :address, :building_name, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
   end
 
-  def move_to_top
-    item = Item.find(params[:item_id])
-    redirect_to root_path if item.purchase.present? || item.user_id == current_user.id
+  def set_item
+    @item = Item.find(params[:item_id])
   end
 
-  def set_item
-    @purchase = Purchase.new(user_id: current_user.id, item_id: params[:item_id])
-    @item = @purchase.item
+  def move_to_top
+    redirect_to root_path if @item.purchase.present? || @item.user_id == current_user.id
   end
 
   def pay_item

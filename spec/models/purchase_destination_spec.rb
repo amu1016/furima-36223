@@ -36,7 +36,7 @@ RSpec.describe PurchaseDestination, type: :model do
         expect(@purchase_destination.errors.full_messages).to include("Postal code is invalid. Enter it as follows (e.g. 123-4567)")
       end
       it 'postal_codeが数字のみであれば保存できないこと' do
-        @purchase_destination.postal_code = 1234567
+        @purchase_destination.postal_code = "1234567"
         @purchase_destination.valid?
         expect(@purchase_destination.errors.full_messages).to include("Postal code is invalid. Enter it as follows (e.g. 123-4567)")
       end
