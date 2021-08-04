@@ -11,9 +11,8 @@ class PurchaseDestination
     validates :phone_number
     validates :token
   end
-  validates :prefecture_id, numericality: {other_than: 0, message: "can't be blank"}
-  PHONENUMBER_REGEX = /\A\d{10,11}\z/.freeze
-  validates :phone_number, format: {with: PHONENUMBER_REGEX, message: "is too short"}
+  validates :prefecture_id, numericality: { other_than: 0, message: "can't be blank"}
+  validates :phone_number, length: { minimum: 10, message: "is too short"}
   validates :phone_number, numericality: { only_integer: true, message: "is invalid. Input only naumber"} 
 
 
