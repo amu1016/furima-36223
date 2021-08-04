@@ -1,7 +1,7 @@
 class PurchasesController < ApplicationController
-  before_action :authenticate_user!, only: :index
+  before_action :authenticate_user!, only: [:index, :create]
   before_action :set_item, only: [:index, :create]
-  before_action :move_to_top, only: :index
+  before_action :move_to_top, only: [:index, :create]
 
   def index
     @purchase_destination = PurchaseDestination.new
@@ -14,7 +14,6 @@ class PurchasesController < ApplicationController
       @purchase_destination.save
       return redirect_to root_path
     else
-      @purchase = Purchase.new(user_id: current_user.id, item_id: params[:item_id])
       render 'index'
     end
   end
