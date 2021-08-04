@@ -6,8 +6,8 @@ class CreateDestinations < ActiveRecord::Migration[6.0]
       t.string          :city,            null: false
       t.string          :address,         null: false
       t.string          :building_name
-      t.string          :phone_namber,    null: false
-      t.references     :purchase,        null: false, foreign_key: true
+      t.string          :phone_number,    null: false
+      t.references      :purchase,        null: false, foreign_key: true
 
       t.timestamps
     end
